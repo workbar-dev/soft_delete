@@ -1,30 +1,42 @@
-class MockModel < ActiveRecord::Base
-  include SoftDelete
-end
-
 RSpec.describe SoftDelete do
+  require "active_record"
+
+  before(:all) do
+    ActiveRecord::Migration.verbose = false
+    ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
+    ActiveRecord::Schema.define(version: 1) do
+      create_table :test_models do |t|
+        t.string :name
+        t.datetime :deleted_at
+      end
+    end
+
+    class TestModel < ActiveRecord::Base
+      include SoftDelete
+    end
+  end
+
   it "has a version number" do
     expect(SoftDelete::VERSION).not_to be nil
   end
 
-  let!(:alderaan) { MockModel.create! }
-  let!(:tatooine) { MockModel.create! }
-  let!(:dagobah) { MockModel.create! }
+  let!(:alderaan) { TestModel.create(name: "Alderaan") }
+  let!(:tatooine) { TestModel.create(name: "Tatooine") }
+  let!(:dagobah) { TestModel.create(name: "Dagobah") }
+
+  before { alderaan.destroy }
 
   describe "scopes" do
-    before { alderaan.destroy }
 
     describe ".not_deleted" do
       it "returns records that have not been deleted" do
-        expect(MockModel.not_deleted).to match_array([tatooine, dagobah])
+        expect(TestModel.not_deleted).to match_array([tatooine, dagobah])
       end
     end
 
     describe ".deleted" do
       it "returns deleted records" do
-        # The array [alderaan] returns a MockModel object, whereas this returns
-        # alderaan as an object of its subclass
-        expect(MockModel.deleted).to match_array([alderaan_alias])
+        expect(TestModel.deleted).to match_array([alderaan])
       end
     end
   end
@@ -41,7 +53,7 @@ RSpec.describe SoftDelete do
     it "deletes the record" do
       id = dagobah.id
       dagobah.delete!
-      expect { MockModel.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { TestModel.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
@@ -68,7 +80,7 @@ RSpec.describe SoftDelete do
     it "deletes the record" do
       id = tatooine.id
       tatooine.destroy!
-      expect { MockModel.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { TestModel.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 

@@ -1,5 +1,7 @@
 require "bundler/setup"
 require "soft_delete"
+require "active_support"
+require "database_cleaner"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -10,5 +12,17 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+  
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+
+  config.before(:each, no_clean: true) do
+    DatabaseCleaner.strategy = DatabaseCleaner::NullStrategy
   end
 end
