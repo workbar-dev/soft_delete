@@ -1,4 +1,5 @@
 require "soft_delete/version"
+require "active_record"
 require "active_support"
 
 module SoftDelete
