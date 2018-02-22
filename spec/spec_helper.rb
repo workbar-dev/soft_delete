@@ -1,4 +1,6 @@
 require "bundler/setup"
+require "active_record"
+require "active_support"
 require "soft_delete"
 
 RSpec.configure do |config|
@@ -11,4 +13,21 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.before do
+    ActiveRecord::Migration.verbose = false
+    ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
+    ActiveRecord::Schema.define(version: 1) do
+      create_table :test_models do |t|
+        t.string :name
+        t.datetime :deleted_at
+      end
+    end
+
+    class TestModel < ActiveRecord::Base
+      include SoftDelete
+    end
+  end
+
+  config.after { TestModel.delete_all }
 end
