@@ -26,7 +26,7 @@ Safely "delete" records from your database without losing them permanently.
   ```
 * Add a `deleted_at` column to the model's database table
   ```
-  rails g migration add_soft_delete_to_my_models add_column my_models deleted_at timestamp
+  rails g migration AddSoftDeleteToMyModels deleted_at:timestamp
   ```
 * Safely call `MyModel#delete` without losing the record forever
 
