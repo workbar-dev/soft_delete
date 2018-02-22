@@ -1,7 +1,7 @@
 require "bundler/setup"
-require "soft_delete"
+require "active_record"
 require "active_support"
-require "database_cleaner"
+require "soft_delete"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -13,16 +13,21 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
-  
-  config.before(:each) do
-    DatabaseCleaner.start
+
+  config.before do
+    ActiveRecord::Migration.verbose = false
+    ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
+    ActiveRecord::Schema.define(version: 1) do
+      create_table :test_models do |t|
+        t.string :name
+        t.datetime :deleted_at
+      end
+    end
+
+    class TestModel < ActiveRecord::Base
+      include SoftDelete
+    end
   end
 
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
-
-  config.before(:each, no_clean: true) do
-    DatabaseCleaner.strategy = DatabaseCleaner::NullStrategy
-  end
+  config.after { TestModel.delete_all }
 end

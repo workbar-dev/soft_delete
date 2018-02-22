@@ -6,10 +6,11 @@ module SoftDelete
 
   included do
     scope :not_deleted, -> { where(deleted_at: nil) }
-    scope :deleted, -> { where("#{table_name}.deleted_at IS NOT NULL").references(table_name.to_sym) }
+    scope :deleted, -> { where("#{table_name}.deleted_at IS NOT NULL").
+      references(table_name.to_sym) }
   end
 
-  # remove record from database but don't run callbacks
+  # "remove" record from database but don't run callbacks
   def delete(type = :soft)
     if type == :soft
       touch(:deleted_at)
@@ -26,7 +27,7 @@ module SoftDelete
     deleted_at.present?
   end
 
-  # remove record from database and run callbacks
+  # "remove" record from database and run callbacks
   def destroy(type = :soft)
     if type == :soft
       touch(:deleted_at)

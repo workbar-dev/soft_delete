@@ -1,21 +1,4 @@
 RSpec.describe SoftDelete do
-  require "active_record"
-
-  before(:all) do
-    ActiveRecord::Migration.verbose = false
-    ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
-    ActiveRecord::Schema.define(version: 1) do
-      create_table :test_models do |t|
-        t.string :name
-        t.datetime :deleted_at
-      end
-    end
-
-    class TestModel < ActiveRecord::Base
-      include SoftDelete
-    end
-  end
-
   it "has a version number" do
     expect(SoftDelete::VERSION).not_to be nil
   end
