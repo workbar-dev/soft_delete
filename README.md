@@ -4,7 +4,7 @@
 
 [source](https://twitter.com/theebeastmaster/status/966870021099180034)
 
-A "soft-delete" marks a record as "deleted", which keeps it in the database
+A soft-delete marks a record as deleted, and keeps it in the database
 for historical reference.
 
 ## Installation
