@@ -26,6 +26,12 @@ RSpec.configure do |config|
 
     class TestModel < ActiveRecord::Base
       include SoftDelete
+      
+      after_destroy :after_destroy_do_this
+      
+      def after_destroy_do_this
+      end
+    
     end
   end
 

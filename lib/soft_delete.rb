@@ -30,7 +30,9 @@ module SoftDelete
   # "remove" record from database and run callbacks
   def destroy(type = :soft)
     if type == :soft
-      touch(:deleted_at)
+      run_callbacks :destroy do
+        touch(:deleted_at)
+      end
     elsif type == :hard
       super()
     end

@@ -52,6 +52,12 @@ RSpec.describe SoftDelete do
   end
 
   describe "#destroy" do
+    
+    it 'runs callbacks' do
+       expect(tatooine).to receive(:after_destroy_do_this)
+       tatooine.destroy
+    end
+    
     it "sets the deleted_at field" do
       expect(tatooine.deleted_at).to be_nil
       tatooine.destroy
