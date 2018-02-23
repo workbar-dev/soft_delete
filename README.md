@@ -48,8 +48,8 @@ the methods that will be added to your model.
 * `.deleted` - records with a deleted_at timestamp
 * `#delete` - set the deleted_at timestamp
 * `#delete!` - delete the record from the database
-* `#destroy` - set the deleted_at timestamp
-* `#destroy!` - delete the record from the database
+* `#destroy` - set the deleted_at timestamp, and run callbacks
+* `#destroy!` - delete the record from the database, and run callbacks
 * `#restore` - set the deleted_at timestamp to nil
 
 It will be necessary to exclude deleted records when querying the model.
