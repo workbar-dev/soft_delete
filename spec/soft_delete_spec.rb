@@ -54,7 +54,7 @@ RSpec.describe SoftDelete do
   describe "#destroy" do
     
     it 'runs callbacks' do
-       expect(tatooine).to receive(:after_save_do_this)
+       expect(tatooine).to receive(:after_destroy_do_this)
        tatooine.destroy
     end
     
