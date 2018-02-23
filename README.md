@@ -5,7 +5,7 @@
 [source](https://twitter.com/theebeastmaster/status/966870021099180034)
 
 A "soft-delete" marks a record as "deleted", which keeps it in the database
-for historical reference. 
+for historical reference.
 
 ## Installation
 
@@ -58,7 +58,7 @@ Use the `not_deleted` scope that now exists on the model.
 ```ruby
 class MyModelsController < ApplicationController
   def index
-    @brands = MyModel.not_deleted
+    @my_models = MyModel.not_deleted
   end
 end
 ```
