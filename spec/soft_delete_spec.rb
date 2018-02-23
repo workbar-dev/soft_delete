@@ -10,7 +10,6 @@ RSpec.describe SoftDelete do
   before { alderaan.destroy }
 
   describe "scopes" do
-
     describe ".not_deleted" do
       it "returns records that have not been deleted" do
         expect(TestModel.not_deleted).to match_array([tatooine, dagobah])
@@ -52,16 +51,15 @@ RSpec.describe SoftDelete do
   end
 
   describe "#destroy" do
-    
-    it 'runs callbacks' do
-       expect(tatooine).to receive(:after_destroy_do_this)
-       tatooine.destroy
-    end
-    
     it "sets the deleted_at field" do
       expect(tatooine.deleted_at).to be_nil
       tatooine.destroy
       expect(tatooine.deleted_at).to be_a(Time)
+    end
+
+    it "runs callbacks" do
+      expect(tatooine).to receive(:after_destroy_do_this)
+      tatooine.destroy
     end
   end
 
@@ -70,6 +68,11 @@ RSpec.describe SoftDelete do
       id = tatooine.id
       tatooine.destroy!
       expect { TestModel.find(id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "runs callbacks" do
+      expect(tatooine).to receive(:after_destroy_do_this)
+      tatooine.destroy!
     end
   end
 
